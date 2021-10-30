@@ -1,21 +1,44 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <h1>{{ title }}</h1>
+  <button @click="start" :disabled="isPlaying">Play</button>
+  <Block v-if="isPlaying" :delay="delay" @end="end"></Block>
+  <Results v-if="showResult" :score="score"></Results>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Block from "./components/Block";
+import Results from "./components/Results";
 
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  components: { Block, Results },
+  data() {
+    return {
+      title: "Ninja Reaction Timer",
+      isPlaying: false,
+      delay: null,
+      score: 0,
+      showResult: false,
+    };
+  },
+  methods: {
+    start() {
+      this.isPlaying = true;
+      this.delay = 2000 + Math.random() * 5000;
+      this.showResult = false;
+    },
+    end(reactionTime) {
+      this.score = reactionTime;
+      this.isPlaying = false;
+      this.showResult = true;
+    },
   },
 };
 </script>
 
 <style>
-#app {
+#app,
+#modals {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
